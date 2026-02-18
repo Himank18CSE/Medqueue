@@ -1,35 +1,45 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");
-const authRoute=require("./routes/authRoutes")
-
-dotenv.config();
+const http = require("http");
+const { Server } = require("socket.io");
+require("dotenv").config();
 
 const app = express();
 
-const appointmentRoutes = require("./routes/appointmentRoutes");
-
-
-
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth",authRoute);
-app.use("/api/appointments", appointmentRoutes);
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/doctors", require("./routes/doctorRoutes"));
+app.use("/api/appointments", require("./routes/appointmentRoutes"));
 
-// Test Route
-app.get("/", (req, res) => {
-  res.send("MedQueue API Running...");
+const server = http.createServer(app);
+
+// 🔥 Attach socket to server
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT"]
+  }
 });
 
-// MongoDB Connect
+// Make io globally accessible
+global.io = io;
+
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB Connected");
-    app.listen(process.env.PORT || 3000, () =>
-      console.log("Server running...")
+    server.listen(process.env.PORT || 3000, () =>
+      console.log("Server running with Socket.io...")
     );
   })
   .catch(err => console.log(err));

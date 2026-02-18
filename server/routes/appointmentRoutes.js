@@ -1,11 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const { bookAppointment } = require("../controllers/appointmentController");
+
+const {
+  bookAppointment,
+  getDoctorQueue,
+  callNextPatient,
+  getMyAppointment,
+  cancelAppointment,
+  getDoctorStats
+} = require("../controllers/appointmentController");
 const authMiddleware = require("../middleware/authMiddleware");
-const { getDoctorQueue } = require("../controllers/appointmentController");
-
-router.get("/queue/:doctorId", getDoctorQueue);
-
 router.post("/book", authMiddleware, bookAppointment);
+router.get("/queue/:doctorId", getDoctorQueue);
+router.put("/next/:doctorId", callNextPatient);
+router.put("/cancel", authMiddleware, cancelAppointment);
+router.get("/my", authMiddleware, getMyAppointment);
+router.get("/stats/:doctorId", getDoctorStats);
+
+
+
 
 module.exports = router;
+

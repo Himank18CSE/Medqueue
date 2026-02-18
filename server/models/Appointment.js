@@ -17,7 +17,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["waiting", "ongoing", "completed"],
+    enum: ["waiting", "ongoing", "completed","cancelled"],
     default: "waiting"
   }
 }, { timestamps: true });

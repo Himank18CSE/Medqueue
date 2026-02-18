@@ -1,19 +1,22 @@
 const mongoose = require("mongoose");
 
-const doctorSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+const doctorSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    specialization: {
+      type: String,
+      default: "General"
+    },
+    avgConsultTime: {
+      type: Number,
+      default: 10
+    }
   },
-  specialization: String,
-  avgConsultTime: {
-    type: Number,
-    default: 10
-  },
-  isAvailable: {
-    type: Boolean,
-    default: true
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Doctor", doctorSchema);

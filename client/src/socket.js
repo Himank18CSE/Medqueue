@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_API_URL);
+const socket = io("https://medqueue-maj3.onrender.com");
 
 export default socket;

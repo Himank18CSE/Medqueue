@@ -10,7 +10,9 @@ const app = express();
 app.use(cors({
   origin: "*"
 }));
-
+app.get("/", (req, res) => {
+  res.send("SmartQueue Backend Running 🚀");
+});
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));

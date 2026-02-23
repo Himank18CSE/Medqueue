@@ -6,6 +6,7 @@ function PatientDashboard() {
   const [message, setMessage] = useState("");
 
   const bookAppointment = async () => {
+    console.log("Book Function Called");
     try {
       const token = localStorage.getItem("token");
 
